@@ -30,149 +30,145 @@ struct NutritionFactsPickerView: View {
                         .zIndex(2)
                 }
                 VStack {
-                    if /*isLoading*/ false {
-//                        ProgressView()
-                    }
-                    else {
-                        ScrollView {
-                            if showResult, let newRecipe = mlRequestService.responseData {
-                                RecipeViewHotdog(width:size.width*0.95, height: 300, recipe: newRecipe)
-                                    .padding(.top, 100)
-                                    .transition(.opacity)
-                                    .animation(.easeInOut)
-                            } else {
-                                VStack(alignment: .leading) {
-                                    Text("Nutrition Facts")
-                                        .font(.title.bold())
-                                    Rectangle()
-                                        .frame(height: 2)
-                                        .padding(.top, -10)
-                                    
-                                    HStack(alignment: .bottom) {
-                                        TextField("", value: $servings, formatter: NumberFormatter())
-                                            .keyboardType(.numberPad)
-                                        //                            .padding(.horizontal)
-                                            .frame(maxWidth: 25)
-                                            .padding(.leading)
-                                            .border(.black, width: 2)
-                                            .font(.title2.bold())
-                                        Text("Servings per recipe")
-                                            .font(.title2)
-                                            .padding(.top, -10)
-                                    }
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    
-                                    HStack {
-                                        Text("Serving size")
-                                        Spacer()
-                                        TextField("", value: $servingSize, formatter: NumberFormatter())
-                                            .frame(maxWidth: 75)
-                                            .padding(.leading)
-                                            .border(.black, width: 2)
-                                        
-                                        Text("g")
-                                    }
-                                    .font(.title2)
-                                    .bold()
-                                    Rectangle()
-                                        .frame(height: 16)
-                                    
-                                    
-                                    Text("Amount per serving")
-                                    HStack {
-                                        Text("Calories")
-                                        Text("650")
-                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                    }
-                                    .font(.title.bold())
-                                    Rectangle()
-                                        .frame(height: 8)
-                                        .padding(.top, -10)
-                                    
-                                    
-                                    Text("% Daily Value*")
-                                        .frame(maxWidth: .infinity, alignment: .trailing)
-                                        .bold()
-                                    Divider()
-                                        .background(.black)
-                                    
-                                    
-                                    HStack {
-                                        Text("Total Fat")
-                                            .bold()
-                                        TextField("", value: $totalFat, formatter: NumberFormatter())
-                                            .frame(maxWidth: 35)
-                                            .border(.black, width: 1)
-                                        Text("g")
-                                        Text("8%")
-                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                            .bold()
-                                    }
-                                    Divider()
-                                        .background(.black)
-                                    
-                                    
-                                    HStack {
-                                        Text("Saturated Fat")
-                                            .bold()
-                                        TextField("", value: .constant(""), formatter: NumberFormatter())
-                                            .frame(maxWidth: 35)
-                                            .border(.black, width: 1)
-                                        Text("g")
-                                        Text("15%")
-                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                            .bold()
-                                    }
-                                    Divider()
-                                        .background(.black)
-                                    
-                                    
-                                    HStack {
-                                        Text("Trans Fat")
-                                            .bold()
-                                        TextField("", value: .constant(""), formatter: NumberFormatter())
-                                            .frame(maxWidth: 35)
-                                            .border(.black, width: 1)
-                                        Text("g")
-                                        Text("5%")
-                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                            .bold()
-                                    }
-                                    Divider()
-                                        .background(.black)
-                                    
-                                    HStack {
-                                        Text("Protein")
-                                            .bold()
-                                        TextField("", value: $protein, formatter: NumberFormatter())
-                                            .frame(maxWidth: 35)
-                                            .border(.black, width: 1)
-                                        Text("g")
-                                        Text("45%")
-                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                            .bold()
-                                    }
-                                    
-                                    
-                                    Rectangle()
-                                        .frame(height: 16)
-                                    
-                                    
-                                    Text("*The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.")
-                                    
-                                }
-                                .padding()
-                                .border(.black, width: 5)
-                                .shadow(color: .black.opacity(0.3), radius: 15)
-                                .background(.white)
-                                .padding()
+                    ScrollView {
+                        if showResult, let newRecipe = mlRequestService.responseData {
+                            ExpandedRecipeView(width: size.width*0.95, recipe: newRecipe, preview: true)
+                                .frame(width: size.width, height: size.height * 0.9)
                                 .padding(.top, 100)
                                 .transition(.opacity)
                                 .animation(.easeInOut)
+                        } else {
+                            VStack(alignment: .leading) {
+                                Text("Nutrition Facts")
+                                    .font(.title.bold())
+                                Rectangle()
+                                    .frame(height: 2)
+                                    .padding(.top, -10)
+                                
+                                HStack(alignment: .bottom) {
+                                    TextField("", value: $servings, formatter: NumberFormatter())
+                                        .keyboardType(.numberPad)
+                                    //                            .padding(.horizontal)
+                                        .frame(maxWidth: 25)
+                                        .padding(.leading)
+                                        .border(.black, width: 2)
+                                        .font(.title2.bold())
+                                    Text("Servings per recipe")
+                                        .font(.title2)
+                                        .padding(.top, -10)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                HStack {
+                                    Text("Serving size")
+                                    Spacer()
+                                    TextField("", value: $servingSize, formatter: NumberFormatter())
+                                        .frame(maxWidth: 75)
+                                        .padding(.leading)
+                                        .border(.black, width: 2)
+                                    
+                                    Text("g")
+                                }
+                                .font(.title2)
+                                .bold()
+                                Rectangle()
+                                    .frame(height: 16)
+                                
+                                
+                                Text("Amount per serving")
+                                HStack {
+                                    Text("Calories")
+                                    Text("650")
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                }
+                                .font(.title.bold())
+                                Rectangle()
+                                    .frame(height: 8)
+                                    .padding(.top, -10)
+                                
+                                
+                                Text("% Daily Value*")
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                                    .bold()
+                                Divider()
+                                    .background(.black)
+                                
+                                
+                                HStack {
+                                    Text("Total Fat")
+                                        .bold()
+                                    TextField("", value: $totalFat, formatter: NumberFormatter())
+                                        .frame(maxWidth: 35)
+                                        .border(.black, width: 1)
+                                    Text("g")
+                                    Text("8%")
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .bold()
+                                }
+                                Divider()
+                                    .background(.black)
+                                
+                                
+                                HStack {
+                                    Text("Saturated Fat")
+                                        .bold()
+                                    TextField("", value: .constant(""), formatter: NumberFormatter())
+                                        .frame(maxWidth: 35)
+                                        .border(.black, width: 1)
+                                    Text("g")
+                                    Text("15%")
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .bold()
+                                }
+                                Divider()
+                                    .background(.black)
+                                
+                                
+                                HStack {
+                                    Text("Trans Fat")
+                                        .bold()
+                                    TextField("", value: .constant(""), formatter: NumberFormatter())
+                                        .frame(maxWidth: 35)
+                                        .border(.black, width: 1)
+                                    Text("g")
+                                    Text("5%")
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .bold()
+                                }
+                                Divider()
+                                    .background(.black)
+                                
+                                HStack {
+                                    Text("Protein")
+                                        .bold()
+                                    TextField("", value: $protein, formatter: NumberFormatter())
+                                        .frame(maxWidth: 35)
+                                        .border(.black, width: 1)
+                                    Text("g")
+                                    Text("45%")
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .bold()
+                                }
+                                
+                                
+                                Rectangle()
+                                    .frame(height: 16)
+                                
+                                
+                                Text("*The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.")
+                                
                             }
+                            .padding()
+                            .border(.black, width: 5)
+                            .shadow(color: .black.opacity(0.3), radius: 15)
+                            .background(.white)
+                            .padding()
+                            .padding(.top, 100)
+                            .transition(.opacity)
+                            .animation(.easeInOut)
                         }
-                        .scrollIndicators(.hidden)
                     }
+                    .scrollIndicators(.hidden)
                 }
                 .ignoresSafeArea()
                 .frame(width: size.width, height: size.height)

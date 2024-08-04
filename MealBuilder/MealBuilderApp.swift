@@ -15,6 +15,7 @@ struct MealBuilderApp: App {
 //                .environmentObject(MLRequestService())
             NutritionFactsPickerView()
                 .environmentObject(MLRequestService())
+                .environmentObject(RecipeStorageService())
         }
     }
 }

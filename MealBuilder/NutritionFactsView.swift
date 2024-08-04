@@ -113,9 +113,6 @@ struct NutritionFactsView: View {
         .shadow(color: .black.opacity(0.3), radius: 15)
         .background(.white)
         .padding()
-        .padding(.top, 100)
-        .transition(.opacity)
-        .animation(.easeInOut)
     }
 }
 
