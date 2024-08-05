@@ -13,5 +13,6 @@ class RecipeStorageService: ObservableObject {
     
     func addRecipe(_ newRecipe: Recipe) {
         self.recipes.append(newRecipe)
+        print("saved \(newRecipe)")
     }
 }

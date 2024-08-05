@@ -19,7 +19,7 @@ struct NutritionFactsView: View {
                 .padding(.top, -10)
             
             HStack(alignment: .bottom) {
-                Text("3 Servings per recipe")
+                Text("[] Servings per recipe")
                     .font(.title2)
                     .padding(.top, -10)
             }
@@ -29,7 +29,7 @@ struct NutritionFactsView: View {
                 Text("Serving size")
                 Spacer()
                 
-                Text("250g")
+                Text("[]")
             }
             .font(.title2)
             .bold()
@@ -40,7 +40,7 @@ struct NutritionFactsView: View {
             Text("Amount per serving")
             HStack {
                 Text("Calories")
-                Text("650")
+                Text(recipe.calories)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .font(.title.bold())
@@ -55,51 +55,33 @@ struct NutritionFactsView: View {
             Divider()
                 .background(.black)
             
-            
-            HStack {
-                Text("Total Fat")
-                    .bold()
-                Text("6g")
-                Text("8%")
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .bold()
+            if let nutritionFacts = recipe.nutritionFacts, nutritionFacts != [] {
+                ForEach(nutritionFacts, id: \.self) { nutrient in
+                    HStack {
+                        Text(nutrient[0] ?? "")
+                            .bold()
+                        Text("\(nutrient[1] ?? "")\(nutrient[2] ?? "")")
+//                        Text(nutrient[2] ?? "")
+                        if nutrient.count == 4 {
+                            Text("\(nutrient[3] ?? "")%")
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .bold()
+                        }
+                    }
+                    Divider()
+                        .background(.black)
+                }
             }
-            Divider()
-                .background(.black)
-            
-            
-            HStack {
-                Text("Saturated Fat")
-                    .bold()
-                Text("10g")
-                Text("15%")
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .bold()
-            }
-            Divider()
-                .background(.black)
-            
-            
-            HStack {
-                Text("Trans Fat")
-                    .bold()
-                Text("3g")
-                Text("5%")
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .bold()
-            }
-            Divider()
-                .background(.black)
-            
-            HStack {
-                Text("Protein")
-                    .bold()
-                Text("40g")
-                Text("45%")
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+            else {
+                Text("Couldn't get nutrition value this time...")
                     .bold()
             }
             
+            HStack {
+                Text("That's all!")
+                    .italic()
+                    .foregroundStyle(.gray)
+            }
             
             Rectangle()
                 .frame(height: 16)
@@ -117,5 +99,5 @@ struct NutritionFactsView: View {
 }
 
 #Preview {
-    NutritionFactsView(recipe: .init(name:"",duration:"",calories:""))
+    NutritionFactsView(recipe: .init(name:"",duration:"",calories:"50", nutritionFacts: [["Protein","100","g","125%"],["Fat","100","g","15%"],["Carbohydrates","100","g","40%"],["Fiber","100","g","60%"]]))
 }

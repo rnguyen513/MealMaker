@@ -72,7 +72,7 @@ class MLRequestService: ObservableObject {
                         self.responseData = recipe
                         self.history.append(recipe)
                         print("done. quitting...")
-                        print("\n\nhistory:\(self.history)")
+//                        print("\n\nhistory:\(self.history)")
                         completion(true)
                     } catch {
                         if retryCount < self.maxRetryCount - 1 {

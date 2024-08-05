@@ -11,11 +11,12 @@ import SwiftUI
 struct MealBuilderApp: App {
     var body: some Scene {
         WindowGroup {
-//            ContentView()
-//                .environmentObject(MLRequestService())
-            NutritionFactsPickerView()
+            ContentView()
                 .environmentObject(MLRequestService())
                 .environmentObject(RecipeStorageService())
+//            NutritionFactsPickerView()
+//                .environmentObject(MLRequestService())
+//                .environmentObject(RecipeStorageService())
         }
     }
 }

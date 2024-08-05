@@ -8,17 +8,31 @@
 import SwiftUI
 
 struct ContentView: View {
-    private var recipes: [Recipe] = [
-        .init(name: "Blue Salad", description: "This came from southern living...", tags: ["2 Servings","Vegan"], images: ["chicken"], duration: "20 MIN", calories: "23 CAL"),
-        .init(name: "Spaghetti & Meatballs", description: "Your perfect spaghetti and meatballs.", tags: ["4 Servings", "Protein"], images: ["spaghetti"], duration: "45 MIN", calories: "400 CAL"),
-        .init(name: "Chicken and Rice", description: "Good ol' chicken and rice. Can't go wrong.", tags: ["3 Servings", "Protein", "Quick"], images: ["steak"], duration: "25 MIN", calories: "400 CAL")
-    ]
+//    private var recipes: [Recipe] = [
+//        .init(name: "Blue Salad", description: "This came from southern living...", tags: ["2 Servings","Vegan"], images: ["chicken"], duration: "20 MIN", calories: "23 CAL"),
+//        .init(name: "Spaghetti & Meatballs", description: "Your perfect spaghetti and meatballs.", tags: ["4 Servings", "Protein"], images: ["spaghetti"], duration: "45 MIN", calories: "400 CAL"),
+//        .init(name: "Chicken and Rice", description: "Good ol' chicken and rice. Can't go wrong.", tags: ["3 Servings", "Protein", "Quick"], images: ["steak"], duration: "25 MIN", calories: "400 CAL")
+//    ]
+    
+    var recipes: [Recipe] {
+        recipeStorageService.recipes
+    }
+    
+    @State private var pickingRecipe: Bool = false
+    
+    @EnvironmentObject var recipeStorageService: RecipeStorageService
     
     var body: some View {
-//        NavigationStack {
+        if pickingRecipe {
+            NutritionFactsPickerView(pickingRecipe: $pickingRecipe)
+                .transition(.slide)
+                .animation(.easeInOut, value: pickingRecipe)
+        }
+        else {
             VStack {
+                //top navbar
                 HStack {
-                    Text("Welcome Chef Lora")
+                    Text("Welcome Chef Chris")
                         .font(.title.bold())
                     Spacer()
                     
@@ -34,21 +48,16 @@ struct ContentView: View {
                 .zIndex(1)
                 .padding()
                 .background(.ultraThinMaterial)
-                //            .background(.purple.opacity(0.2))
                 
+                //content
                 GeometryReader { geometry in
-                    
-                    VStack {
-                    }
-                    .frame(width:geometry.size.width)
-                    .zIndex(1)
                     
                     ScrollView(.vertical) {
                         VStack {
-                            
-                            
                             Button("New", systemImage: "plus") {
-                                print("sdf")
+                                withAnimation {
+                                    pickingRecipe = true
+                                }
                             }
                             .frame(width:geometry.size.width*0.9)
                             .padding(.vertical)
@@ -59,18 +68,29 @@ struct ContentView: View {
                             .padding(.bottom, -30)
                             .padding(.top, geometry.size.height*0.1)
                             
-                            
-                            ForEach(recipes) { _recipe in
-                                RecipeViewHotdog(width: geometry.size.width*0.9, height: 300, recipe: _recipe)
+                            if !recipes.isEmpty {
+                                ForEach(recipes) { _recipe in
+                                    RecipeViewHotdog(width: geometry.size.width*0.9, height: 300, recipe: _recipe)
+                                        .onTapGesture {
+                                            ExpandedRecipeView(recipe: _recipe, preview: false)
+                                                .transition(.slide)
+                                                .animation(.easeInOut)
+                                                .zIndex(3)
+                                        }
+                                }
+                                .offset(y:geometry.size.height*0.05)
+                                .padding(.horizontal)
                             }
-                            .offset(y:geometry.size.height*0.05)
-                            .padding(.horizontal)
+                            else {
+                                RecipeViewHotdog(width: geometry.size.width*0.9, height: 500, recipe: .init(name: "Placeholder spaghetti with meatballs", description: "Add a recipe with the button above!", images: ["spaghetti"], duration: "50 min", calories: "100000 calories"))
+                                    .offset(y: geometry.size.height*0.05)
+                                    .padding(.horizontal)
+                            }
                             
                             
                             Text("nothing to see here")
                                 .offset(y:geometry.size.height*0.1)
                                 .opacity(0.6)
-                            
                             
                         }
                         .padding(.bottom, geometry.size.height*0.25)
@@ -78,9 +98,9 @@ struct ContentView: View {
                     .scrollIndicators(.hidden)
                     .frame(width: geometry.size.width, height: geometry.size.height*1.2)
                     .offset(y:-geometry.size.height*0.1)
-//                    .background(.red)
                 }
                 
+                //bottom navbar
                 HStack {
                     ForEach(["house.fill","square.split.2x2.fill","square.fill","gear"], id: \.self) { img in
                         
@@ -98,11 +118,13 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity)
                 .background(.ultraThinMaterial.opacity(0.9))
             }
-//            .navigationTitle("Welcome Chef Lora")
-//        }
+            .transition(.slide)
+            .animation(.easeInOut, value: pickingRecipe)
+        }
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(RecipeStorageService())
 }

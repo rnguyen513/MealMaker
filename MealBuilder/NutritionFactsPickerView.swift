@@ -11,12 +11,14 @@ struct NutritionFactsPickerView: View {
     @State private var servings: Int = 3
     @State private var servingSize: Int = 0
     @State private var totalFat: Int = 15
-    @State private var protein: Int = 35
+    @State private var protein: Int = 50
     
     @State private var isLoading: Bool = false
     @State private var showResult: Bool = false
+    @Binding var pickingRecipe: Bool
     
     @EnvironmentObject var mlRequestService: MLRequestService
+    @EnvironmentObject var recipeStorageService: RecipeStorageService
     
     var body: some View {
         GeometryReader { geometry in
@@ -30,14 +32,18 @@ struct NutritionFactsPickerView: View {
                         .zIndex(2)
                 }
                 VStack {
-                    ScrollView {
-                        if showResult, let newRecipe = mlRequestService.responseData {
-                            ExpandedRecipeView(width: size.width*0.95, recipe: newRecipe, preview: true)
-                                .frame(width: size.width, height: size.height * 0.9)
-                                .padding(.top, 100)
+                    if showResult, let newRecipe = mlRequestService.responseData {
+                        VStack {
+                            ExpandedRecipeView(recipe: newRecipe, preview: true)
+                                .background(.orange.gradient.opacity(0.7))
                                 .transition(.opacity)
-                                .animation(.easeInOut)
-                        } else {
+                                .animation(.easeInOut, value: showResult)
+                        }
+                        .frame(maxHeight: .infinity)
+                        .background(.white)
+                    }
+                    else {
+                        ScrollView {
                             VStack(alignment: .leading) {
                                 Text("Nutrition Facts")
                                     .font(.title.bold())
@@ -48,7 +54,6 @@ struct NutritionFactsPickerView: View {
                                 HStack(alignment: .bottom) {
                                     TextField("", value: $servings, formatter: NumberFormatter())
                                         .keyboardType(.numberPad)
-                                    //                            .padding(.horizontal)
                                         .frame(maxWidth: 25)
                                         .padding(.leading)
                                         .border(.black, width: 2)
@@ -165,23 +170,53 @@ struct NutritionFactsPickerView: View {
                             .padding()
                             .padding(.top, 100)
                             .transition(.opacity)
-                            .animation(.easeInOut)
+                            .animation(.easeInOut, value: showResult)
                         }
+                        .scrollIndicators(.hidden)
                     }
-                    .scrollIndicators(.hidden)
                 }
                 .ignoresSafeArea()
                 .frame(width: size.width, height: size.height)
                 .background(LinearGradient(gradient: Gradient(colors: [.white, .black]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                .overlay {
+                
+                VStack {
+                    Spacer()
                     HStack {
                         if isLoading {
                             ProgressView()
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(.ultraThinMaterial)
+                                .clipShape(.capsule)
+                                .padding()
                         }
                         else if let responseData = mlRequestService.responseData {
-                            Button("Continue?") {
-                                print(responseData)
+                            Button("Go back", systemImage: "xmark") {
+                                print("go back")
+                                withAnimation {
+                                    showResult = false
+                                    mlRequestService.responseData = nil
+                                }
                             }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(.red.gradient)
+                            .clipShape(.capsule)
+                            .padding()
+                            
+                            Button("Continue?") {
+                                recipeStorageService.addRecipe(responseData)
+                                withAnimation {
+                                    showResult = false
+                                    pickingRecipe = false
+                                    mlRequestService.responseData = nil
+                                }
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(.green.gradient)
+                            .clipShape(.capsule)
+                            .padding()
                         } else {
                             Button("Let's go", systemImage: "arrowshape.right.fill") {
                                 print("Servings: \(servings), totalFat: \(totalFat), protein: \(protein)")
@@ -204,27 +239,25 @@ struct NutritionFactsPickerView: View {
                                     }
                                 }
                             }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(.green.gradient)
+                            .clipShape(.capsule)
+                            .padding()
                         }
                     }
                     .foregroundStyle(.black)
                     .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(.green.gradient)
-                    .clipShape(.capsule)
-                    .offset(y:(size.height/2 * 0.975))
-//                    .shadow(color: .black.opacity(0.5), radius: 15)
-                    .padding()
+                    .offset(y:size.height*0.05)
                 }
-                
-                VStack {
-                    Spacer()
-                }
+                .frame(maxWidth: .infinity)
+                .zIndex(3)
             }
         }
     }
 }
-
-#Preview {
-    NutritionFactsPickerView()
-        .environmentObject(MLRequestService())
-}
+//
+//#Preview {
+//    NutritionFactsPickerView()
+//        .environmentObject(MLRequestService())
+//}
