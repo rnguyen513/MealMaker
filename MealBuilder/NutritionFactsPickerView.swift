@@ -248,6 +248,7 @@ struct NutritionFactsPickerView: View {
                     }
                     .foregroundStyle(.black)
                     .padding()
+                    .shadow(color: .black.opacity(0.5), radius: 15)
                     .offset(y:size.height*0.05)
                 }
                 .frame(maxWidth: .infinity)

@@ -10,6 +10,7 @@
 		2862C8622C5EF51F0076265E /* ExpandedRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2862C8612C5EF51F0076265E /* ExpandedRecipeView.swift */; };
 		2862C8642C5EF5A50076265E /* NutritionFactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2862C8632C5EF5A50076265E /* NutritionFactsView.swift */; };
 		2862C8662C5F0F9C0076265E /* RecipeStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2862C8652C5F0F9C0076265E /* RecipeStorageService.swift */; };
+		2862C8692C627F5B0076265E /* StateManagerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2862C8682C627F5B0076265E /* StateManagerService.swift */; };
 		2863DF472C4AF4CC00942611 /* MealBuilderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2863DF462C4AF4CC00942611 /* MealBuilderApp.swift */; };
 		2863DF492C4AF4CC00942611 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2863DF482C4AF4CC00942611 /* ContentView.swift */; };
 		2863DF4B2C4AF4CD00942611 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2863DF4A2C4AF4CD00942611 /* Assets.xcassets */; };
@@ -25,6 +26,7 @@
 		2862C8612C5EF51F0076265E /* ExpandedRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedRecipeView.swift; sourceTree = "<group>"; };
 		2862C8632C5EF5A50076265E /* NutritionFactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionFactsView.swift; sourceTree = "<group>"; };
 		2862C8652C5F0F9C0076265E /* RecipeStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeStorageService.swift; sourceTree = "<group>"; };
+		2862C8682C627F5B0076265E /* StateManagerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateManagerService.swift; sourceTree = "<group>"; };
 		2863DF432C4AF4CC00942611 /* MealBuilder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MealBuilder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2863DF462C4AF4CC00942611 /* MealBuilderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealBuilderApp.swift; sourceTree = "<group>"; };
 		2863DF482C4AF4CC00942611 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -48,6 +50,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2862C8672C627F3E0076265E /* Environment */ = {
+			isa = PBXGroup;
+			children = (
+				2863DF5F2C529FE300942611 /* MLRequestService.swift */,
+				2862C8652C5F0F9C0076265E /* RecipeStorageService.swift */,
+				2862C8682C627F5B0076265E /* StateManagerService.swift */,
+			);
+			path = Environment;
+			sourceTree = "<group>";
+		};
 		2863DF3A2C4AF4CB00942611 = {
 			isa = PBXGroup;
 			children = (
@@ -67,14 +79,13 @@
 		2863DF452C4AF4CC00942611 /* MealBuilder */ = {
 			isa = PBXGroup;
 			children = (
+				2862C8672C627F3E0076265E /* Environment */,
 				2863DF582C503D4900942611 /* Model */,
 				2863DF462C4AF4CC00942611 /* MealBuilderApp.swift */,
 				2863DF482C4AF4CC00942611 /* ContentView.swift */,
 				2862C8612C5EF51F0076265E /* ExpandedRecipeView.swift */,
 				2863DF5D2C51837800942611 /* NutritionFactsPickerView.swift */,
 				2862C8632C5EF5A50076265E /* NutritionFactsView.swift */,
-				2863DF5F2C529FE300942611 /* MLRequestService.swift */,
-				2862C8652C5F0F9C0076265E /* RecipeStorageService.swift */,
 				2863DF5B2C51814F00942611 /* RecipeViewHorizontal.swift */,
 				2863DF562C4F06F100942611 /* RecipeViewHotdog.swift */,
 				2863DF4A2C4AF4CD00942611 /* Assets.xcassets */,
@@ -172,6 +183,7 @@
 				2863DF5C2C51814F00942611 /* RecipeViewHorizontal.swift in Sources */,
 				2863DF492C4AF4CC00942611 /* ContentView.swift in Sources */,
 				2863DF602C529FE300942611 /* MLRequestService.swift in Sources */,
+				2862C8692C627F5B0076265E /* StateManagerService.swift in Sources */,
 				2862C8662C5F0F9C0076265E /* RecipeStorageService.swift in Sources */,
 				2863DF472C4AF4CC00942611 /* MealBuilderApp.swift in Sources */,
 				2863DF5E2C51837800942611 /* NutritionFactsPickerView.swift in Sources */,

@@ -51,14 +51,18 @@ struct RecipeViewHotdog: View {
                         Spacer()
                         Spacer()
                         
-                        if let images = recipe.images {
-                            Image(images.first!)
-                                .resizable()
-                                .frame(width:100,height:100)
-                                .aspectRatio(contentMode: .fit)
-    //                            .padding(.trailing, 30)
+                        if let images = recipe.images, !images.isEmpty, images.first != "spaghetti" {
+                            AsyncImage(url: URL(string: images.first!))
+                                .frame(maxWidth: width * 0.25, maxHeight: height * 0.25)
                                 .clipShape(.rect(cornerRadius: 5))
-                                .shadow(color: .black.opacity(0.1), radius:10, x: 10, y: 10)
+                                .aspectRatio(contentMode: .fill)
+                                .padding()
+                                .shadow(color: .black.opacity(0.1), radius: 10, x: 10, y: 10)
+                        }
+                        else {
+                            Text("No picture")
+                                .foregroundStyle(.gray)
+                                .padding()
                         }
                         
                         Spacer()
@@ -89,4 +93,7 @@ struct RecipeViewHotdog: View {
 #Preview {
 //    RecipeViewHotdog(width: 350, height: 300, recipe: .init(name:"Blue Salad", description: "", tags: ["2 Servings", "Vegan"], images: ["london2"], duration: "25 MIN", calories: "23 CALORIES"))
     ContentView()
+        .environmentObject(MLRequestService())
+        .environmentObject(RecipeStorageService())
+        .environmentObject(StateManagerService())
 }

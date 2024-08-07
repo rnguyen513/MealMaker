@@ -14,6 +14,7 @@ struct MealBuilderApp: App {
             ContentView()
                 .environmentObject(MLRequestService())
                 .environmentObject(RecipeStorageService())
+                .environmentObject(StateManagerService())
 //            NutritionFactsPickerView()
 //                .environmentObject(MLRequestService())
 //                .environmentObject(RecipeStorageService())

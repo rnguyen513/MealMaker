@@ -8,11 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-//    private var recipes: [Recipe] = [
-//        .init(name: "Blue Salad", description: "This came from southern living...", tags: ["2 Servings","Vegan"], images: ["chicken"], duration: "20 MIN", calories: "23 CAL"),
-//        .init(name: "Spaghetti & Meatballs", description: "Your perfect spaghetti and meatballs.", tags: ["4 Servings", "Protein"], images: ["spaghetti"], duration: "45 MIN", calories: "400 CAL"),
-//        .init(name: "Chicken and Rice", description: "Good ol' chicken and rice. Can't go wrong.", tags: ["3 Servings", "Protein", "Quick"], images: ["steak"], duration: "25 MIN", calories: "400 CAL")
-//    ]
     
     var recipes: [Recipe] {
         recipeStorageService.recipes
@@ -21,9 +16,15 @@ struct ContentView: View {
     @State private var pickingRecipe: Bool = false
     
     @EnvironmentObject var recipeStorageService: RecipeStorageService
+    @EnvironmentObject var stateManagerService: StateManagerService
     
     var body: some View {
-        if pickingRecipe {
+        if let selectedRecipe = stateManagerService.selectedRecipe, stateManagerService.showingExpandedRecipe {
+            ExpandedRecipeView(recipe: selectedRecipe, preview: false)
+                .transition(.scale)
+                .animation(.easeInOut, value: selectedRecipe)
+        }
+        else if pickingRecipe {
             NutritionFactsPickerView(pickingRecipe: $pickingRecipe)
                 .transition(.slide)
                 .animation(.easeInOut, value: pickingRecipe)
@@ -56,6 +57,8 @@ struct ContentView: View {
                         VStack {
                             Button("New", systemImage: "plus") {
                                 withAnimation {
+                                    stateManagerService.selectedRecipe = nil
+                                    stateManagerService.showingExpandedRecipe = false
                                     pickingRecipe = true
                                 }
                             }
@@ -72,10 +75,10 @@ struct ContentView: View {
                                 ForEach(recipes) { _recipe in
                                     RecipeViewHotdog(width: geometry.size.width*0.9, height: 300, recipe: _recipe)
                                         .onTapGesture {
-                                            ExpandedRecipeView(recipe: _recipe, preview: false)
-                                                .transition(.slide)
-                                                .animation(.easeInOut)
-                                                .zIndex(3)
+                                            withAnimation {
+                                                stateManagerService.selectedRecipe = _recipe
+                                                stateManagerService.showingExpandedRecipe = true
+                                            }
                                         }
                                 }
                                 .offset(y:geometry.size.height*0.05)
@@ -126,5 +129,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(MLRequestService())
         .environmentObject(RecipeStorageService())
+        .environmentObject(StateManagerService())
 }
