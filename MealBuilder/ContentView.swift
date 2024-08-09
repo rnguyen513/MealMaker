@@ -14,6 +14,7 @@ struct ContentView: View {
     }
     
     @State private var pickingRecipe: Bool = false
+    @State private var showInventory: Bool = false
     
     @EnvironmentObject var recipeStorageService: RecipeStorageService
     @EnvironmentObject var stateManagerService: StateManagerService
@@ -30,99 +31,130 @@ struct ContentView: View {
                 .animation(.easeInOut, value: pickingRecipe)
         }
         else {
-            VStack {
-                //top navbar
-                HStack {
-                    Text("Welcome Chef Chris")
-                        .font(.title.bold())
-                    Spacer()
-                    
-                    Button(action: {
-                        print("switch to horizontal view")
-                    }) {
-                        Image(systemName: "square.split.2x2.fill")
-                            .foregroundStyle(.black)
-                    }
-                    
-                }
-                .opacity(0.8)
-                .zIndex(1)
-                .padding()
-                .background(.ultraThinMaterial)
-                
-                //content
-                GeometryReader { geometry in
-                    
-                    ScrollView(.vertical) {
-                        VStack {
-                            Button("New", systemImage: "plus") {
-                                withAnimation {
-                                    stateManagerService.selectedRecipe = nil
-                                    stateManagerService.showingExpandedRecipe = false
-                                    pickingRecipe = true
-                                }
-                            }
-                            .frame(width:geometry.size.width*0.9)
-                            .padding(.vertical)
-                            .background(.green.opacity(0.7))
-                            .foregroundStyle(.white)
-                            .font(.title2.bold())
-                            .clipShape(.rect(cornerRadius: 15))
-                            .padding(.bottom, -30)
-                            .padding(.top, geometry.size.height*0.1)
-                            
-                            if !recipes.isEmpty {
-                                ForEach(recipes) { _recipe in
-                                    RecipeViewHotdog(width: geometry.size.width*0.9, height: 300, recipe: _recipe)
-                                        .onTapGesture {
-                                            withAnimation {
-                                                stateManagerService.selectedRecipe = _recipe
-                                                stateManagerService.showingExpandedRecipe = true
-                                            }
-                                        }
-                                }
-                                .offset(y:geometry.size.height*0.05)
-                                .padding(.horizontal)
-                            }
-                            else {
-                                RecipeViewHotdog(width: geometry.size.width*0.9, height: 500, recipe: .init(name: "Placeholder spaghetti with meatballs", description: "Add a recipe with the button above!", images: ["spaghetti"], duration: "50 min", calories: "100000 calories"))
-                                    .offset(y: geometry.size.height*0.05)
-                                    .padding(.horizontal)
-                            }
-                            
-                            
-                            Text("nothing to see here")
-                                .offset(y:geometry.size.height*0.1)
-                                .opacity(0.6)
-                            
-                        }
-                        .padding(.bottom, geometry.size.height*0.25)
-                    }
-                    .scrollIndicators(.hidden)
-                    .frame(width: geometry.size.width, height: geometry.size.height*1.2)
-                    .offset(y:-geometry.size.height*0.1)
-                }
-                
-                //bottom navbar
-                HStack {
-                    ForEach(["house.fill","square.split.2x2.fill","square.fill","gear"], id: \.self) { img in
+            ZStack {
+                VStack {
+                    //top navbar
+                    HStack {
+                        Text("Welcome Chef Chris")
+                            .font(.title.bold())
+                        Spacer()
                         
                         Button(action: {
-                            print("\(img) tapped")
+                            print("switch to horizontal view")
                         }) {
-                            Image(systemName:img)
+                            Image(systemName: "square.split.2x2.fill")
+                                .foregroundStyle(.black)
+                        }
+                        
+                    }
+                    .opacity(0.8)
+                    .zIndex(1)
+                    .padding()
+                    .background(.ultraThinMaterial)
+                    
+                    //content
+                    GeometryReader { geometry in
+                        
+                        ScrollView(.vertical) {
+                            VStack {
+                                Button("New", systemImage: "plus") {
+                                    withAnimation {
+                                        stateManagerService.selectedRecipe = nil
+                                        stateManagerService.showingExpandedRecipe = false
+                                        pickingRecipe = true
+                                    }
+                                }
+                                .frame(width:geometry.size.width*0.9)
+                                .padding(.vertical)
+                                .background(.green.opacity(0.7))
+                                .foregroundStyle(.white)
+                                .font(.title2.bold())
+                                .clipShape(.rect(cornerRadius: 15))
+                                .padding(.bottom, -30)
+                                .padding(.top, geometry.size.height*0.1)
+                                
+                                if !recipes.isEmpty {
+                                    ForEach(recipes) { _recipe in
+                                        RecipeViewHotdog(width: geometry.size.width*0.9, height: 300, recipe: _recipe)
+                                            .onTapGesture {
+                                                withAnimation {
+                                                    stateManagerService.selectedRecipe = _recipe
+                                                    stateManagerService.showingExpandedRecipe = true
+                                                }
+                                            }
+                                    }
+                                    .offset(y:geometry.size.height*0.05)
+                                    .padding(.horizontal)
+                                }
+                                else {
+                                    RecipeViewHotdog(width: geometry.size.width*0.9, height: 500, recipe: .init(name: "Placeholder spaghetti with meatballs", description: "Add a recipe with the button above!", images: ["spaghetti"], duration: "50 min", calories: "100000 calories"))
+                                        .offset(y: geometry.size.height*0.05)
+                                        .padding(.horizontal)
+                                }
+                                
+                                
+                                Text("nothing to see here")
+                                    .offset(y:geometry.size.height*0.1)
+                                    .opacity(0.6)
+                                
+                            }
+                            .padding(.bottom, geometry.size.height*0.25)
+                        }
+                        .scrollIndicators(.hidden)
+                        .frame(width: geometry.size.width, height: geometry.size.height*1.2)
+                        .offset(y:-geometry.size.height*0.1)
+                    }
+                    
+                    //bottom navbar
+                    HStack {
+                        Button(action: {
+                            print("house.fill tapped")
+                        }) {
+                            Image(systemName:"house.fill")
+                                .offset(y:10)
+                                .foregroundStyle(.black.opacity(0.8))
+                        }
+                        
+                        Button(action: {
+                            print("square.split.2x2.fill tapped")
+                        }) {
+                            Image(systemName:"square.split.2x2.fill")
+                                .offset(y:10)
+                                .foregroundStyle(.black.opacity(0.8))
+                        }
+                        
+                        Button(action: {
+                            print("square.fill tapped")
+                            withAnimation {
+                                showInventory.toggle()
+                            }
+                        }) {
+                            Image(systemName:"square.fill")
+                                .offset(y:10)
+                                .foregroundStyle(.black.opacity(0.8))
+                        }
+                        
+                        Button(action: {
+                            print("gear tapped")
+                        }) {
+                            Image(systemName:"gear")
                                 .offset(y:10)
                                 .foregroundStyle(.black.opacity(0.8))
                         }
                     }
-                    .padding(.horizontal)
-                    .padding(.horizontal)
+                    .frame(maxWidth: .infinity)
+                    .background(.ultraThinMaterial.opacity(0.9))
                 }
-                .frame(maxWidth: .infinity)
-                .background(.ultraThinMaterial.opacity(0.9))
+                .transition(.slide)
+                .animation(.easeInOut, value: pickingRecipe)
+                
+                if showInventory {
+                    InventoryView()
+                        .zIndex(2)
+                        .transition(.opacity)
+                        .animation(.easeInOut, value: showInventory)
+                }
             }
-            .transition(.slide)
-            .animation(.easeInOut, value: pickingRecipe)
         }
     }
 }

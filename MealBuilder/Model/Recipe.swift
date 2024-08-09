@@ -18,6 +18,7 @@ struct Recipe: Identifiable, Hashable, Decodable {
     var duration: String
     var calories: String
     var nutritionFacts: [[String?]]?
+    var comments: String?
 }
 
 struct MLResponse: Decodable {
